@@ -14,7 +14,7 @@ app.use(express.json());
 
 
 
-const client = new MongoClient("mongodb+srv://<db_username>:<db_password>@cluster0.i9yr5cu.mongodb.net/?appName=Cluster0");
+const client = new MongoClient("mongodb+srv://:<db_password>@cluster0.i9yr5cu.mongodb.net/?appName=Cluster0");
 
 export async function connectToMongoDB() {
   try {

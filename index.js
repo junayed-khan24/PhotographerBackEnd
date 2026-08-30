@@ -1,7 +1,7 @@
 const dotenv = require("dotenv");
 const express = require("express");
 const cors = require("cors");
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 
 dotenv.config();
 
@@ -34,23 +34,36 @@ async function run() {
       res.send("Photographer Backend is running!");
     });
 
-    // Create Booking
-    app.post("/bookings", async (req, res) => {
-      try {
-        const booking = req.body;
-
-        booking.createdAt = new Date();
-
-        const result = await bookingsCollection.insertOne(booking);
-
-     
-      } catch (error) {
-        console.error(error);
-
-      }
+    // সকল Booking দেখানোর জন্য
+    app.get("/bookings", async (req, res) => {
+      const result = await bookingsCollection.find().toArray();
+      res.send(result);
     });
 
-   
+    // একটি নির্দিষ্ট Booking দেখানোর জন্য
+    app.get("/bookings/:id", async (req, res) => {
+      const id = req.params.id;
+
+      const query = {
+        _id: new ObjectId(id),
+      };
+
+      const result = await bookingsCollection.findOne(query);
+
+      res.send(result);
+    });
+
+    // নতুন Booking MongoDB-তে Save করার জন্য
+    app.post("/bookings", async (req, res) => {
+      const booking = req.body;
+
+      booking.createdAt = new Date();
+
+      const result = await bookingsCollection.insertOne(booking);
+
+      res.send(result);
+    });
+
 
   } catch (err) {
     console.error("MongoDB connection error:", err);

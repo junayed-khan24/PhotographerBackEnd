@@ -65,6 +65,20 @@ async function run() {
     });
 
 
+    // একটি নির্দিষ্ট Booking Delete করার জন্য
+    app.delete("/bookings/:id", async (req, res) => {
+      const id = req.params.id;
+
+      const query = {
+        _id: new ObjectId(id),
+      };
+
+      const result = await bookingsCollection.deleteOne(query);
+
+      res.send(result);
+    });
+
+
   } catch (err) {
     console.error("MongoDB connection error:", err);
   }
